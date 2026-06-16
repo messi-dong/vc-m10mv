@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX MEDIA | 頂級運動 MV 製作與品牌招商計劃</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        volt: '#adff2f', // 螢光黃綠，代表極致運動活力
+                        darkgray: '#0a0b0d',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'Noto Sans TC', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & Lucide Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Noto+Sans+TC:wght@300;400;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* 隱藏 YouTube 播放器的黑色邊框並保持滿版比例 */
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 56.25vw; /* 16:9 Aspect Ratio */
+            min-height: 100vh;
+            min-width: 177.77vh; /* 16:9 Aspect Ratio */
+            transform: translate(-50%, -50%);
+        }
+        @media (max-aspect-ratio: 16/9) {
+            .video-background {
+                width: 177.77vh;
+                height: 100vh;
+            }
+        }
+        /* 玻璃磨砂效果 */
+        .glass-panel {
+            background: rgba(15, 17, 23, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(173, 255, 47, 0.4);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px -10px rgba(173, 255, 47, 0.15);
+        }
+        /* 自訂滾動條 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0b0d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #adff2f;
+        }
+    </style>
+</head>
+<body class="bg-darkgray text-gray-100 font-sans overflow-x-hidden">
+
+    <!-- 頂部導航欄 -->
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- LOGO -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 bg-gradient-to-tr from-volt to-emerald-500 rounded-lg flex items-center justify-center font-black text-black text-xl italic tracking-tighter">
+                    A
+                </div>
+                <div>
+                    <span class="font-display font-black text-xl tracking-widest text-white group-hover:text-volt transition-colors">APEX</span>
+                    <span class="font-display text-xs block text-gray-400 tracking-widest -mt-1">ATHLETE MEDIA</span>
+                </div>
+            </a>
+
+            <!-- 網頁導航 -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wider text-gray-300">
+                <a href="#about" class="hover:text-volt transition-colors">關於計畫</a>
+                <a href="#services" class="hover:text-volt transition-colors">頂級製作</a>
+                <a href="#calculator" class="hover:text-volt transition-colors">投報估算</a>
+                <a href="#tiers" class="hover:text-volt transition-colors">招商方案</a>
+                <a href="#faq" class="hover:text-volt transition-colors">常見問題</a>
+            </nav>
+
+            <!-- 聯絡與簡報下載 -->
+            <div class="flex items-center space-x-4">
+                <button onclick="downloadPitchDeck()" class="hidden sm:inline-flex items-center space-x-2 text-xs font-bold tracking-widest uppercase border border-volt/40 px-4 py-2 rounded-full hover:bg-volt hover:text-black transition-all duration-300">
+                    <i data-lucide="download" class="w-4.5 h-4.5"></i>
+                    <span>招商簡報.PDF</span>
+                </button>
+                <a href="#contact" class="bg-volt hover:bg-white text-black font-black text-xs tracking-widest uppercase px-5 py-3 rounded-full transition-all duration-300 shadow-[0_4px_20px_rgba(173,255,47,0.3)] hover:shadow-white/20">
+                    立即洽談
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄版位 (滿版 YouTube 影片背景) -->
+    <section class="relative w-full h-screen flex items-center justify-center overflow-hidden z-10 select-none">
+        <!-- YouTube iframe 播放器容器 -->
+        <div class="absolute inset-0 pointer-events-none z-0">
+            <div id="player" class="video-background"></div>
+        </div>
+
+        <!-- 影片漸層遮罩與網格 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-darkgray/10 z-[1] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,#0a0b0d_100%)] z-[1] pointer-events-none"></div>
+
+        <!-- 英雄版主文案內容 -->
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center">
+            <div class="inline-flex items-center space-x-2 bg-black/60 border border-volt/30 backdrop-blur-md px-4 py-2 rounded-full mb-6 animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-volt"></span>
+                <span class="text-xs font-bold tracking-widest text-volt uppercase">2026 全球體育影像招商計畫</span>
+            </div>
+            
+            <h1 class="font-display font-black text-4xl md:text-6xl italic tracking-tighter text-white uppercase leading-none mb-6">
+                用神級影像重獲運動榮耀
+            </h1>
+
+            <p class="text-base md:text-xl text-gray-300 max-w-2xl font-light leading-relaxed mb-10">
+                以 4K 院線級電影感鏡頭、極限感官剪輯與獨家音效重製，為新生代巨星與頂級體育品牌建立破億流量。我們不只是拍影片，我們在創造體育界的永恆圖騰。
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 items-center">
+                <a href="#services" class="w-full sm:w-auto bg-volt hover:bg-white text-black font-black text-sm tracking-widest uppercase px-8 py-4 rounded-full transition-all duration-300 shadow-[0_4px_30px_rgba(173,255,47,0.4)]">
+                    探索製作服務
+                </a>
+                <a href="#tiers" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold text-sm tracking-widest uppercase px-8 py-4 rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300">
+                    查看合作方案
+                </a>
+            </div>
+        </div>
+
+        <!-- 浮動影片音量與播放控制面板 -->
+        <div class="absolute bottom-10 right-6 md:right-12 z-20 flex items-center space-x-3 bg-black/70 border border-white/10 backdrop-blur-md px-4 py-3 rounded-full">
+            <span class="text-xs font-semibold text-gray-400 mr-2 flex items-center space-x-1">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                <span>背景影片：Lamine Yamal Showcase</span>
+            </span>
+            <button id="togglePlayBtn" onclick="togglePlay()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors" title="播放/暫停背景">
+                <i data-lucide="pause" id="playIcon" class="w-5 h-5"></i>
+            </button>
+            <button id="toggleMuteBtn" onclick="toggleMute()" class="w-10 h-10 rounded-full bg-volt/90 hover:bg-volt flex items-center justify-center text-black transition-all shadow-[0_0_15px_rgba(173,255,47,0.4)]" title="解鎖賽場震撼音效">
+                <i data-lucide="volume-x" id="muteIcon" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- 往下滑動提示 -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+            <span class="text-[10px] tracking-widest text-gray-500 uppercase mb-2">SCROLL TO DISCOVER</span>
+            <div class="w-[2px] h-12 bg-gradient-to-b from-volt to-transparent rounded-full animate-bounce"></div>
+        </div>
+    </section>
+
+    <!-- 關鍵實績數據 -->
+    <section id="about" class="relative z-20 bg-darkgray border-t border-white/5 py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                <div class="text-center md:text-left">
+                    <h3 class="font-display font-black text-4xl md:text-6xl text-white">
+                        <span class="text-volt">1.5</span>億+
+                    </h3>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-2">全平台播放總次數</p>
+                    <p class="text-sm text-gray-500 mt-1">體育宣傳片與選手紀錄片</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="font-display font-black text-4xl md:text-6xl text-white">
+                        <span class="text-volt">200</span>支+
+                    </h3>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-2">頂級體育MV產出</p>
+                    <p class="text-sm text-gray-500 mt-1">涵蓋足球、籃球、格鬥、極限運動</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="font-display font-black text-4xl md:text-6xl text-white">
+                        <span class="text-volt">340</span>%
+                    </h3>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-2">品牌平均轉化率提升</p>
+                    <p class="text-sm text-gray-500 mt-1">合作贊助品牌溢價效果顯著</p>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 class="font-display font-black text-4xl md:text-6xl text-white">
+                        <span class="text-volt">4K</span>/8K
+                    </h3>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-2">院線電影級製作標準</p>
+                    <p class="text-sm text-gray-500 mt-1">RED/ARRI 頂配攝影機群支持</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頂級製作服務介紹 -->
+    <section id="services" class="relative z-20 py-24 bg-gradient-to-b from-darkgray to-black/80">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-16">
+                <div>
+                    <h2 class="text-xs font-bold tracking-widest text-volt uppercase mb-3">PROFESSIONAL SERVICES</h2>
+                    <h3 class="font-display font-black text-3xl md:text-5xl uppercase tracking-tight text-white">
+                        為頂尖品牌與選手<br>量身定製的影像圖騰
+                    </h3>
+                </div>
+                <p class="text-gray-400 max-w-md mt-4 md:mt-0 leading-relaxed font-light">
+                    我們提供全方位的體育影像包裝，從創意編導、極限運鏡到賽場神還原配樂，為品牌與運動明星打造最具傳播深度的標誌性作品。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 服務 1 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-volt/5 rounded-full blur-2xl group-hover:bg-volt/10 transition-all"></div>
+                    <div class="w-12 h-12 rounded-2xl bg-volt/10 flex items-center justify-center text-volt mb-6">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-xl text-white mb-3">運動巨星個人商業 MV</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light mb-6">
+                        如 Lamine Yamal 一般，將高光技巧、個人奮鬥史與神級踩點音樂結合。適用於運動員 IP 孵化、商業簽約敲門磚。
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-2">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>神級賽事踩點混剪</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>個人動態商標/特效包裝</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務 2 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-volt/5 rounded-full blur-2xl group-hover:bg-volt/10 transition-all"></div>
+                    <div class="w-12 h-12 rounded-2xl bg-volt/10 flex items-center justify-center text-volt mb-6">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-xl text-white mb-3">品牌賽事招商宣傳片</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light mb-6">
+                        為體育聯賽、大型盃賽打造大氣雄渾的招商宣傳片。以高燃度的影像敘事，點燃頂級企業的投資與贊助熱情。
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-2">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>大氣情懷敘事編導</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>3D 炫彩大螢幕開場動畫</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務 3 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-volt/5 rounded-full blur-2xl group-hover:bg-volt/10 transition-all"></div>
+                    <div class="w-12 h-12 rounded-2xl bg-volt/10 flex items-center justify-center text-volt mb-6">
+                        <i data-lucide="video" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-xl text-white mb-3">運動裝備潮流微電影</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light mb-6">
+                        結合跑鞋、科技健身、潮流服飾，採用極客賽博風、街頭美學。將產品與極限汗水完美融合，點爆社群銷量。
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-2">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>街頭極限運動視角</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>微距科技感材質慢動作</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 服務 4 -->
+                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-volt/5 rounded-full blur-2xl group-hover:bg-volt/10 transition-all"></div>
+                    <div class="w-12 h-12 rounded-2xl bg-volt/10 flex items-center justify-center text-volt mb-6">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-display font-bold text-xl text-white mb-3">戰術訓練人文紀錄片</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed font-light mb-6">
+                        深入更衣室、訓練場。記錄眼淚、汗水、挫折與重生。用真實的力量建立品牌與消費者之間的深度情感共鳴。
+                    </p>
+                    <ul class="text-xs text-gray-500 space-y-2">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>獨家更衣室視角捕捉</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-1 h-1 bg-volt rounded-full"></span>
+                            <span>深度運動員心路專訪</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 經典作品展示區 -->
+    <section id="portfolio" class="relative z-20 py-24 bg-black/40">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-bold tracking-widest text-volt uppercase mb-3">OUR WORKSHOWCASE</h2>
+                <h3 class="font-display font-black text-3xl md:text-5xl uppercase tracking-tight text-white">全球神級案例庫</h3>
+                <p class="text-gray-400 mt-4 leading-relaxed font-light">
+                    點擊下方精選案例，一鍵體驗我們在體育視覺領域寫下的傳奇故事。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 案例 1 -->
+                <div class="group relative rounded-3xl overflow-hidden aspect-video cursor-pointer" onclick="openPortfolioModal('Q3kq5K_Yg-8', 'Lamine Yamal 2026：Magical Dribbling Skills', '足球 | 巨星個人 MV')">
+                    <img src="https://i.ytimg.com/vi/Q3kq5K_Yg-8/maxresdefault.jpg" alt="[Lamine Yamal 足球 MV]" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent flex flex-col justify-end p-8">
+                        <span class="text-xs font-bold text-volt uppercase tracking-wider mb-2">足球 | 巨星個人 MV</span>
+                        <h4 class="font-display font-bold text-xl text-white group-hover:text-volt transition-colors">Lamine Yamal：魔幻盤帶與極限射門</h4>
+                        <p class="text-xs text-gray-400 mt-2 flex items-center space-x-1">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                            <span>累積播放：4,690,000+ 次</span>
+                        </p>
+                    </div>
+                    <div class="absolute inset-0 bg-volt/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-full bg-volt text-black flex items-center justify-center shadow-[0_0_20px_rgba(173,255,47,0.6)]">
+                            <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例 2 -->
+                <div class="group relative rounded-3xl overflow-hidden aspect-video cursor-pointer" onclick="openPortfolioModal('Q3kq5K_Yg-8', '極限競速 2026：重力邊緣', '極限運動 | 品牌招商 MV')">
+                    <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&q=80&w=1000" alt="[極限單車 MV]" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent flex flex-col justify-end p-8">
+                        <span class="text-xs font-bold text-volt uppercase tracking-wider mb-2">極限運動 | 品牌招商 MV</span>
+                        <h4 class="font-display font-bold text-xl text-white group-hover:text-volt transition-colors">極限競速：重力與意志的邊緣</h4>
+                        <p class="text-xs text-gray-400 mt-2 flex items-center space-x-1">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                            <span>累積播放：1,200,000+ 次</span>
+                        </p>
+                    </div>
+                    <div class="absolute inset-0 bg-volt/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-full bg-volt text-black flex items-center justify-center shadow-[0_0_20px_rgba(173,255,47,0.6)]">
+                            <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例 3 -->
+                <div class="group relative rounded-3xl overflow-hidden aspect-video cursor-pointer" onclick="openPortfolioModal('Q3kq5K_Yg-8', 'APEX 潮流街頭籃球邀請賽紀錄片', '街頭籃球 | 商業招商 MV')">
+                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=1000" alt="[街頭籃球 MV]" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent flex flex-col justify-end p-8">
+                        <span class="text-xs font-bold text-volt uppercase tracking-wider mb-2">街頭籃球 | 商業招商 MV</span>
+                        <h4 class="font-display font-bold text-xl text-white group-hover:text-volt transition-colors">APEX 戰天鬥地：街頭籃球狂潮</h4>
+                        <p class="text-xs text-gray-400 mt-2 flex items-center space-x-1">
+                            <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                            <span>累積播放：8,500,000+ 次</span>
+                        </p>
+                    </div>
+                    <div class="absolute inset-0 bg-volt/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-full bg-volt text-black flex items-center justify-center shadow-[0_0_20px_rgba(173,255,47,0.6)]">
+                            <i data-lucide="play" class="w-6 h-6 fill-current"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 互動式招商回報估算器 (ROI Calculator) -->
+    <section id="calculator" class="relative z-20 py-24 bg-gradient-to-b from-black/80 to-darkgray">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-volt to-emerald-500"></div>
+                
+                <div class="text-center max-w-xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold tracking-widest text-volt uppercase mb-2">ROI CALCULATOR</h2>
+                    <h3 class="font-display font-black text-2xl md:text-4xl text-white">招商投資回報即時估算</h3>
+                    <p class="text-sm text-gray-400 mt-2">
+                        拖動滑桿，根據預期投放預算與管道，預估我們能為您創造的商業價值。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <!-- 控制面板 -->
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-bold text-gray-300">1. 預期投資預算 (新台幣)</span>
+                                <span class="text-volt font-bold" id="budgetVal">NT$ 50 萬</span>
+                            </div>
+                            <input type="range" id="budgetRange" min="20" max="300" step="10" value="50" oninput="calculateROI()" class="w-full accent-volt bg-zinc-800 h-2 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-gray-500 mt-1">
+                                <span>20 萬 (入門)</span>
+                                <span>300 萬 (殿堂級)</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-bold text-gray-300">2. 主要投放渠道</span>
+                                <span class="text-emerald-400 font-bold" id="channelVal">社群全網流 (YouTube/IG/Tiktok)</span>
+                            </div>
+                            <select id="channelSelect" onchange="calculateROI()" class="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-volt">
+                                <option value="1.0">社群全網流 (YouTube / IG / Tiktok)</option>
+                                <option value="1.4">體育串流平台 (DAZN / 愛爾達 ELTA)</option>
+                                <option value="1.8">全球級跨界投放 (社群 + 線下巨幕 + 賽事大屏)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 計算結果呈現 -->
+                    <div class="bg-black/50 border border-white/5 rounded-2xl p-8 relative">
+                        <h4 class="text-xs font-bold tracking-widest text-gray-400 uppercase mb-4 text-center">預估核心商業價值</h4>
+                        
+                        <div class="space-y-6">
+                            <div class="text-center pb-6 border-b border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">預估品牌曝光總價值</span>
+                                <span class="font-display font-black text-3xl md:text-5xl text-volt" id="exposureVal">NT$ 1,500,000+</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-zinc-900/50 p-3 rounded-xl border border-white/5">
+                                    <span class="text-[10px] text-gray-500 block mb-1">預估最低總播放</span>
+                                    <span class="font-display font-bold text-lg text-white" id="viewsVal">250萬+ 次</span>
+                                </div>
+                                <div class="bg-zinc-900/50 p-3 rounded-xl border border-white/5">
+                                    <span class="text-[10px] text-gray-500 block mb-1">社群分享裂變率</span>
+                                    <span class="font-display font-bold text-lg text-white" id="shareVal">高互動 (5.8%)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-[10px] text-gray-500 leading-relaxed">
+                                * 估算數值基於本團隊過往 200+ 支體育 MV 的大數據統計。詳細 ROI 會隨賽事熱度與明星本身熱度而有提升。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 尊榮招商方案 (Partnership Tiers) -->
+    <section id="tiers" class="relative z-20 py-24 bg-darkgray">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-xs font-bold tracking-widest text-volt uppercase mb-3">PARTNERSHIP TIERS</h2>
+                <h3 class="font-display font-black text-3xl md:text-5xl uppercase tracking-tight text-white">年度招商與製作方案</h3>
+                <p class="text-gray-400 mt-4 leading-relaxed font-light">
+                    精準匹配您的行銷野心。我們提供多維度的合作模式，從標準贊助到殿堂級獨家戰略同盟。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- 方案 1 -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between relative group">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block mb-1">基礎星火計量</span>
+                        <h4 class="font-display font-black text-3xl text-white mb-4">品牌贊助夥伴</h4>
+                        <div class="text-4xl font-display font-black text-white mb-6">
+                            NT$ 30萬 <span class="text-xs text-gray-500 font-normal">/ 單案起</span>
+                        </div>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-6 font-light">
+                            適合追求中小型賽事曝光或特定新銳選手 IP 扶持的品牌商，以超值預算獲取爆款 MV 流量紅利。
+                        </p>
+                        <ul class="space-y-4 border-t border-white/5 pt-6 text-sm text-gray-300">
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>1支 120 秒高清 4K 運動商業 MV</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>品牌 LOGO 及產品特寫植入 (2次)</span>
+                            </li>
+                            <li class="flex items-center space-x-3 text-gray-500">
+                                <i data-lucide="x" class="w-4 h-4 text-gray-600"></i>
+                                <span class="line-through">獨家冠名與導演獨家專訪包裝</span>
+                            </li>
+                            <li class="flex items-center space-x-3 text-gray-500">
+                                <i data-lucide="x" class="w-4 h-4 text-gray-600"></i>
+                                <span class="line-through">全球全頻道聯合發行權益</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="#contact" onclick="selectTier('品牌贊助夥伴')" class="block w-full text-center py-3 bg-white/5 group-hover:bg-volt group-hover:text-black font-bold text-xs tracking-widest uppercase rounded-full transition-all duration-300">
+                            選擇此合作模式
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 方案 2 (熱門推薦) -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between relative border-2 border-volt/50 shadow-[0_10px_40px_-10px_rgba(173,255,47,0.15)] group">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-volt text-black font-black text-[10px] tracking-widest uppercase px-4 py-1.5 rounded-full">
+                        MOST POPULAR
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-volt uppercase tracking-widest block mb-1">深度聯合發行</span>
+                        <h4 class="font-display font-black text-3xl text-white mb-4">聯合製作人</h4>
+                        <div class="text-4xl font-display font-black text-white mb-6">
+                            NT$ 80萬 <span class="text-xs text-gray-500 font-normal">/ 單案起</span>
+                        </div>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-6 font-light">
+                            專為主流體育裝備品牌與知名賽事設計。全方位的深度內容共創，將品牌核心精神與運動員熱血完美相嵌。
+                        </p>
+                        <ul class="space-y-4 border-t border-white/5 pt-6 text-sm text-gray-300">
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>1支 3分鐘主 MV + 3支 15秒短影音</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>品牌冠名與片頭聯合呈現 (Co-producer)</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>核心劇情植入 + 選手專用裝備特寫</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>主流體育媒體聯合發佈保障</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="#contact" onclick="selectTier('聯合製作人')" class="block w-full text-center py-3 bg-volt text-black font-black text-xs tracking-widest uppercase rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(173,255,47,0.3)]">
+                            選擇此合作模式
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 方案 3 -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between relative group">
+                    <div>
+                        <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest block mb-1">年度戰略同盟</span>
+                        <h4 class="font-display font-black text-3xl text-white mb-4">首席戰略同盟</h4>
+                        <div class="text-4xl font-display font-black text-white mb-6">
+                            NT$ 200萬 <span class="text-xs text-gray-500 font-normal">/ 年度起</span>
+                        </div>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-6 font-light">
+                            殿堂級最高規格。全年度的體育視覺總策劃。享有旗下所有黃金運動員、世界級紀錄片的優先首席冠名權。
+                        </p>
+                        <ul class="space-y-4 border-t border-white/5 pt-6 text-sm text-gray-300">
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>全年 4支 A級運動 MV 與整年度視覺外包</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>獨家最高級別冠名權 (Presenter)</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>線下大型體育賽事、首映會現場聯合行銷</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i data-lucide="check" class="w-4 h-4 text-volt"></i>
+                                <span>YouTube / 串流平台千萬級流量保底協議</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="#contact" onclick="selectTier('首席戰略同盟')" class="block w-full text-center py-3 bg-white/5 group-hover:bg-volt group-hover:text-black font-bold text-xs tracking-widest uppercase rounded-full transition-all duration-300">
+                            選擇此合作模式
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 常見問題區 (FAQ) -->
+    <section id="faq" class="relative z-20 py-24 bg-black/60">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-xs font-bold tracking-widest text-volt uppercase mb-3">FAQ SECTION</h2>
+                <h3 class="font-display font-black text-3xl md:text-5xl uppercase tracking-tight text-white">常見商業招商問題</h3>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div class="glass-card rounded-2xl p-6 cursor-pointer group" onclick="toggleFaq(1)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-display font-bold text-lg text-white group-hover:text-volt transition-colors">Q1：製作一支像背景中 Lamine Yamal 的 4K 巨星 MV 需要多久時間？</h4>
+                        <span class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-volt" id="faq-icon-1">+</span>
+                    </div>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out mt-0" id="faq-ans-1">
+                        <p class="text-sm text-gray-400 pt-4 leading-relaxed font-light">
+                            如果使用現有聯賽與公開高光素材進行「神級混剪與音效重組」，一般製作週期為 10 到 14 個工作天。若需要我們團隊前往歐洲、亞洲各大賽場進行「實地院線鏡頭補拍或個人專訪」，含前置編導籌備、當地拍攝與後期調色剪接，大約需要 4 到 6 週。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="glass-card rounded-2xl p-6 cursor-pointer group" onclick="toggleFaq(2)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-display font-bold text-lg text-white group-hover:text-volt transition-colors">Q2：我們的品牌不屬於運動產業，適合參與招商嗎？</h4>
+                        <span class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-volt" id="faq-icon-2">+</span>
+                    </div>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out mt-0" id="faq-ans-2">
+                        <p class="text-sm text-gray-400 pt-4 leading-relaxed font-light">
+                            非常適合！現代體育早已與「年輕、潮流、極客、科技、新創、奢侈品」深度跨界。過往我們合作的品牌不乏能量飲料、加密貨幣、智慧穿戴裝置、高端汽車品牌等。只要您想為品牌注入「拼搏精神、領先卓越、爆發力、速度感」等情感價值，體育 MV 便是最強力的載體。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="glass-card rounded-2xl p-6 cursor-pointer group" onclick="toggleFaq(3)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-display font-bold text-lg text-white group-hover:text-volt transition-colors">Q3：招商的「百萬流量保底協議」是如何執行的？</h4>
+                        <span class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-volt" id="faq-icon-3">+</span>
+                    </div>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out mt-0" id="faq-ans-3">
+                        <p class="text-sm text-gray-400 pt-4 leading-relaxed font-light">
+                            在 A 級與 S 級（首席同盟）方案中，我們會搭配全球數個百萬級粉絲體育大 V、YouTube 權威博主及 Instagram 發行矩陣進行聯合發布。同時在合約中簽訂「KPI 保證條款」，若未在規定時間內達到承諾播放次數，我們將等比例無償延長廣告權益或加拍推廣短影音。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="contact-container">
+        <div class="contact-header">
+          <h2>聯絡我 / 合作洽詢</h2>
+          <p>有任何有趣的企劃或商務合作想法嗎？歡迎填寫下方表單，我會盡快回覆您！</p>
+        </div>
+        
+        <form action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSeyohyPZXBuiL5Ku8Emim4P745zLKW4XFgYivEjaueM8rXuFw/formResponse" 
+              method="POST" 
+              target="hidden_iframe" 
+              onsubmit="isSubmitted=true;" 
+              class="contact-form">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="form-name">姓名 <span class="required">*</span></label>
+              <input type="text" id="form-name" name="entry.588998168" placeholder="如何稱呼您" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="form-email">Email <span class="required">*</span></label>
+              <input type="email" id="form-email" name="entry.476214014" placeholder="yourname@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-type">企劃類型</label>
+            <input type="text" id="form-type" name="entry.1610329698" placeholder="例如：動態影像製作、網站開發、商務演講...">
+          </div>
+
+          <div class="form-group">
+            <label for="form-message">需求簡述 <span class="required">*</span></label>
+            <textarea id="form-message" name="entry.1646642689" rows="5" placeholder="請簡單描述您的合作細節與時程規劃..." required></textarea>
+          </div>
+
+          <div class="form-submit">
+            <button type="submit" class="btn-submit">送出需求</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <div id="success-modal" class="custom-modal">
+      <div class="modal-content">
+        <div class="modal-icon">✓</div>
+        <h3>需求已送出，我們將盡快與您聯絡！</h3>
+        <p>感謝您的來信，團隊將在 1-2 個工作天內評估並透過 Email 回覆您。</p>
+        <button onclick="closeFormModal()" class="btn-close">確定</button>
+      </div>
+    </div>
+
+    <!-- Footer 區塊 -->
+    <footer class="relative z-20 bg-black py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center space-x-3 mb-6 md:mb-0">
+                <div class="w-8 h-8 bg-volt rounded flex items-center justify-center font-black text-black text-base italic">A</div>
+                <span class="font-display font-black text-lg tracking-widest text-white">APEX MEDIA</span>
+            </div>
+            
+            <p class="text-xs text-gray-500 text-center md:text-left">
+                &copy; 2026 APEX ATHLETE MEDIA INC. ALL RIGHTS RESERVED. <br class="md:hidden">
+                設計大師特別版．用熱血影像為品牌封神
+            </p>
+
+            <div class="flex items-center space-x-4 mt-6 md:mt-0 text-xs text-gray-400">
+                <button onclick="copyToClipboard('business@apexmedia.com')" class="hover:text-volt flex items-center space-x-1">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <span>複製招商信箱</span>
+                </button>
+                <span>|</span>
+                <a href="#about" class="hover:text-volt">隱私政策</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 彈出式 Portfolio 影片 modal -->
+    <div id="portfolioModal" class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 hidden">
+        <div class="relative w-full max-w-4xl bg-zinc-950 rounded-3xl border border-white/10 overflow-hidden">
+            <button onclick="closePortfolioModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-volt hover:text-black transition-colors z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="aspect-video w-full">
+                <iframe id="modalVideoIframe" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+            <div class="p-6 md:p-8">
+                <span class="text-xs font-bold text-volt uppercase tracking-wider block mb-2" id="modalCategory">分類</span>
+                <h4 class="font-display font-black text-2xl text-white mb-2" id="modalTitle">影片標題</h4>
+                <p class="text-sm text-gray-400 leading-relaxed font-light">
+                    極致細節包裝。我們為本案導入最新的多機位高速捕捉與全景環繞音效，幫助贊助夥伴在行銷波段上取得超過預估 3 倍的互動留存率。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自訂通知 Message Box (替代 alert) -->
+    <div id="customToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-black/90 border border-volt/30 text-volt font-bold text-sm tracking-wide px-6 py-4 rounded-full shadow-[0_10px_30px_rgba(173,255,47,0.2)] hidden">
+        <!-- 內容動態填充 -->
+    </div>
+
+    <script type="text/javascript">var isSubmitted = false;</script>
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(isSubmitted) { showFormModal(); }"></iframe>
+
+    <style>
+      :root {
+        --primary-color: #5746e3;
+        --primary-hover: #4535c4;
+        --bg-light: #f8f9fa;
+        --text-main: #2d3748;
+        --text-muted: #718096;
+        --border-color: #e2e8f0;
+      }
+
+      .contact-section {
+        padding: 80px 20px;
+        background-color: var(--bg-light);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+
+      .contact-container {
+        max-width: 720px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .contact-header {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      .contact-header h2 {
+        font-size: 28px;
+        color: var(--text-main);
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .contact-header p {
+        color: var(--text-muted);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .contact-form .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 576px) {
+        .contact-form .form-grid {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 22px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      .form-group .required {
+        color: #e53e3e;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 15px;
+        color: var(--text-main);
+        background-color: #fff;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(87, 70, 227, 0.15);
+      }
+
+      .form-submit {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .btn-submit {
+        background-color: var(--primary-color);
+        color: #fff;
+        border: none;
+        padding: 14px 40px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        width: 100%;
+      }
+
+      .btn-submit:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .btn-submit:active {
+        transform: scale(0.98);
+      }
+
+      .custom-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .custom-modal.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-30px);
+        transition: transform 0.3s ease;
+      }
+
+      .custom-modal.show .modal-content {
+        transform: translateY(0);
+      }
+
+      .modal-icon {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(87, 70, 227, 0.1);
+        color: var(--primary-color);
+        border-radius: 50%;
+        font-size: 30px;
+        line-height: 60px;
+        margin: 0 auto 20px;
+        font-weight: bold;
+      }
+
+      .modal-content h3 {
+        font-size: 20px;
+        color: var(--text-main);
+        margin-bottom: 12px;
+        font-weight: 700;
+      }
+
+      .modal-content p {
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 25px;
+      }
+
+      .btn-close {
+        background-color: var(--text-main);
+        color: #fff;
+        border: none;
+        padding: 10px 30px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .btn-close:hover {
+        background-color: #1a202c;
+      }
+    </style>
+
+    <script>
+      function showFormModal() {
+        const modal = document.getElementById('success-modal');
+        modal.classList.add('show');
+        document.querySelector('.contact-form').reset();
+      }
+
+      function closeFormModal() {
+        const modal = document.getElementById('success-modal');
+        modal.classList.remove('show');
+        isSubmitted = false;
+      }
+    </script>
+
+    <!-- YouTube IFrame Player API -->
+    <script>
+        let player;
+        let isMuted = true;
+        let isPlaying = true;
+
+        // 載入 YouTube API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // API 載入完成後的初始化回呼
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: 'Q3kq5K_Yg-8',
+                playerVars: {
+                    'autoplay': 1,
+                    'mute': 1,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'Q3kq5K_Yg-8', // 為了達到重複循環播放，playlist 必須帶有一樣的 ID
+                    'playsinline': 1,
+                    'rel': 0,
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'iv_load_policy:': 3
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+            // 在某些行動端裝置上，初次播放必須靜音以符合 Autoplay 政策
+            player.mute();
+        }
+
+        function onPlayerStateChange(event) {
+            // 當影片播完，手動觸行動態循環播放以確保不出現中斷
+            if (event.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+            }
+        }
+
+        // 暫停、播放背景影片控制
+        function togglePlay() {
+            const playIcon = document.getElementById('playIcon');
+            if (isPlaying) {
+                player.pauseVideo();
+                playIcon.setAttribute('data-lucide', 'play');
+                showToast('背景影片已暫停');
+                isPlaying = false;
+            } else {
+                player.playVideo();
+                playIcon.setAttribute('data-lucide', 'pause');
+                showToast('背景影片已恢復播映');
+                isPlaying = true;
+            }
+            lucide.createIcons();
+        }
+
+        // 靜音、解鎖賽場震撼音訊控制
+        function toggleMute() {
+            const muteIcon = document.getElementById('muteIcon');
+            const toggleMuteBtn = document.getElementById('toggleMuteBtn');
+            if (isMuted) {
+                player.unMute();
+                player.setVolume(80); // 設定為震撼的 80 音量
+                muteIcon.setAttribute('data-lucide', 'volume-2');
+                toggleMuteBtn.classList.remove('bg-volt/90', 'text-black');
+                toggleMuteBtn.classList.add('bg-white', 'text-black');
+                showToast('🔥 已開啟賽場高燃音效！聆聽熱血瞬間');
+                isMuted = false;
+            } else {
+                player.mute();
+                muteIcon.setAttribute('data-lucide', 'volume-x');
+                toggleMuteBtn.classList.remove('bg-white', 'text-black');
+                toggleMuteBtn.classList.add('bg-volt/90', 'text-black');
+                showToast('背景影片已切換回靜音');
+                isMuted = true;
+            }
+            lucide.createIcons();
+        }
+
+        // 導航欄滾動磨砂效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/5');
+            } else {
+                navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/5');
+            }
+        });
+
+        // 互動式 ROI 估算器運算邏輯
+        function calculateROI() {
+            const budget = parseInt(document.getElementById('budgetRange').value);
+            const budgetValText = document.getElementById('budgetVal');
+            const channelMultiplier = parseFloat(document.getElementById('channelSelect').value);
+            const channelSelect = document.getElementById('channelSelect');
+            
+            // 更新預算顯示
+            budgetValText.innerText = `NT$ ${budget} 萬`;
+            
+            // 更新渠道文本提示
+            const channelVal = document.getElementById('channelVal');
+            channelVal.innerText = channelSelect.options[channelSelect.selectedIndex].text;
+
+            // 計算品牌曝光價值 (估計值：預算 * 乘數 * 發散效應)
+            const exposure = Math.round(budget * 3 * channelMultiplier);
+            const exposureVal = document.getElementById('exposureVal');
+            exposureVal.innerText = `NT$ ${exposure.toLocaleString()} 萬+`;
+
+            // 計算最低總播放 (1萬預算約能吸引 4.5 萬次到 7 萬次觀看)
+            const views = Math.round(budget * 5.2 * channelMultiplier);
+            const viewsVal = document.getElementById('viewsVal');
+            viewsVal.innerText = `${views} 萬+ 次`;
+
+            // 社群分享裂變率隨預算而有不同的資源推廣深度
+            const shareVal = document.getElementById('shareVal');
+            if (budget < 50) {
+                shareVal.innerText = "精準社群 (3.2%)";
+            } else if (budget >= 50 && budget < 120) {
+                shareVal.innerText = "高能互動 (5.8%)";
+            } else {
+                shareVal.innerText = "病毒式擴散 (9.2%)";
+            }
+        }
+
+        // 表單中動態挑選方案的便利輔助
+        function selectTier(tierName) {
+            document.getElementById('selectedTier').value = tierName;
+            showToast(`已為您自動載入「${tierName}」意向方案，請填妥下方資訊`);
+        }
+
+        // 模擬招商簡報 PDF 下載
+        function downloadPitchDeck() {
+            showToast('📩 正在加密打包 2026 APEX 招商簡報.PDF ...');
+            setTimeout(() => {
+                showToast('✅ 簡報下載成功！歡迎仔細研讀。');
+            }, 1500);
+        }
+
+        // FAQ 展開/收闔
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faq-ans-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            if (ans.style.maxHeight && ans.style.maxHeight !== '0px') {
+                ans.style.maxHeight = '0px';
+                icon.innerText = '+';
+            } else {
+                // 先收起全部
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById(`faq-ans-${i}`).style.maxHeight = '0px';
+                    document.getElementById(`faq-icon-${i}`).innerText = '+';
+                }
+                ans.style.maxHeight = ans.scrollHeight + 'px';
+                icon.innerText = '-';
+            }
+        }
+
+        // 開啟 Portfolio 影片 Modal
+        function openPortfolioModal(videoId, title, category) {
+            const modal = document.getElementById('portfolioModal');
+            const iframe = document.getElementById('modalVideoIframe');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalCategory = document.getElementById('modalCategory');
+
+            modalTitle.innerText = title;
+            modalCategory.innerText = category;
+            
+            // 載入對應的 YouTube 影片 (在此 demo 全面載入 Yamal 的經典 4K 影片)
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            modal.classList.remove('hidden');
+        }
+
+        // 關閉 Portfolio 影片 Modal
+        function closePortfolioModal() {
+            const modal = document.getElementById('portfolioModal');
+            const iframe = document.getElementById('modalVideoIframe');
+            iframe.src = ""; // 停止影片播放
+            modal.classList.add('hidden');
+        }
+
+        function showFormModal() {
+          const modal = document.getElementById('success-modal');
+          modal.classList.add('show');
+          document.querySelector('.contact-form').reset();
+        }
+
+        function closeFormModal() {
+          const modal = document.getElementById('success-modal');
+          modal.classList.remove('show');
+          isSubmitted = false;
+        }
+
+        // 輔助剪貼簿複製
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`📋 已將招商信箱「${text}」複製到您的剪貼簿`);
+        }
+
+        // 浮動通知 Toast 的自訂函數
+        function showToast(message) {
+            const toast = document.getElementById('customToast');
+            toast.innerText = message;
+            toast.classList.remove('hidden');
+            
+            // 自動於 4 秒後淡出
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 4000);
+        }
+
+        // 初始化估估算器數值與圖標
+        window.onload = function() {
+            calculateROI();
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
